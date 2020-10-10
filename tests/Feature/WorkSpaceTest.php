@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Channel;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Database\QueryException;
@@ -74,6 +75,7 @@ class WorkSpaceTest extends TestCase
         });
     }
 
+
     /** @test */
     function a_user_can_belongs_to_multiple_workspace()
     {
@@ -85,5 +87,14 @@ class WorkSpaceTest extends TestCase
         tap(User::with('workspaces')->first()->workspaces, function($workspaces) {
             $this->assertCount(2, $workspaces);
         });
+    }
+
+    /** @test */
+    function a_workspace_can_have_multiple_channels()
+    {
+        $workSpace = Workspace::factory(['name' => 'ABC Org'])
+                              ->has(Channel::factory()->count(2))
+                              ->create();
+        $this->assertCount(2, $workSpace->channels);
     }
 }
