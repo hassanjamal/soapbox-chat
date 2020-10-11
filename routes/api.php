@@ -24,7 +24,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('/workspaces', [WorkSpaceController::class, 'store'])
          ->name('workspace.store');
 
-    Route::post('/invite', [ChannelUserController::class, 'store'])
+    Route::post('/channel/invite', [ChannelUserController::class, 'store'])
          ->name('channels.users.store')
          ->middleware('workspace-access','channel-access');
 

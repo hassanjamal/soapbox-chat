@@ -12,24 +12,19 @@ class CheckChannelAccess
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if( $request->has('channel_id')){
-            $channelAccess = Channel::with([
-                'users' => function($q) {
-                    $q->where('users.id', Auth::user()->id);
-                }
-            ])->find($request->get('channel_id'));
-
-           if ($channelAccess && $channelAccess->users->count()){
-               return $next($request);
-           }
+        if ($request->has('channel_id')) {
+            $userChannels = Auth::user()->channels->pluck('id')->toArray();
+            if (in_array(request('channel_id'), $userChannels)) {
+                return $next($request);
+            }
         }
-        return response()->json(['message' => 'You are not authorised to access the channel'],422   );
+
+        return response()->json(['message' => 'You are not authorised to access the channel'], 422);
     }
 }

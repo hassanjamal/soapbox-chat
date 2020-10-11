@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSentToChannel;
 use App\Models\Channel;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 
 class MessageController extends Controller
 {
@@ -35,6 +37,8 @@ class MessageController extends Controller
             'user_id' => Auth::user()->id
         ]);
         if ($message) {
+            MessageSentToChannel::dispatch($message);
+
             return (response(['message' => 'Message added to channel successfully'], 200));
         }
 

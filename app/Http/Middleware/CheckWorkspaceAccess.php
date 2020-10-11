@@ -20,13 +20,8 @@ class CheckWorkspaceAccess
     public function handle(Request $request, Closure $next)
     {
         if( $request->has('workspace_id')){
-            $workspaceAccess = Workspace::with([
-                'users' => function($q) {
-                    $q->where('users.id', Auth::user()->id);
-                }
-            ])->find($request->get('workspace_id'));
-
-            if ($workspaceAccess && $workspaceAccess->users->count()){
+            $userWorkspaces = Auth::user()->workspaces->pluck('id')->toArray();
+            if (in_array(request('workspace_id'), $userWorkspaces)) {
                 return $next($request);
             }
         }

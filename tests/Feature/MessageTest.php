@@ -13,6 +13,8 @@ use Tests\TestCase;
 
 class MessageTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected $firstUser;
 
     protected $secondUser;
@@ -33,7 +35,6 @@ class MessageTest extends TestCase
         $this->channel = collect($this->workspace->channels)->first();
     }
 
-    use RefreshDatabase;
 
     /** @test */
     function a_user_can_send_a_message_to_a_channel_if_he_belongs_to_channel()
