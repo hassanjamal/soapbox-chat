@@ -9,9 +9,9 @@ class Channel extends Model
 {
     use HasFactory;
 
-    protected $table="channels";
+    protected $table = "channels";
 
-    protected $fillable=[
+    protected $fillable = [
         'name',
         'description',
         'workspace_id'
@@ -25,5 +25,10 @@ class Channel extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
