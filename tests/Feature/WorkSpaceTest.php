@@ -13,11 +13,12 @@ use Tests\TestCase;
 
 class WorkSpaceTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, DatabaseMigrations;
 
     /** @test */
     function user_can_create_a_workspace()
     {
+        $this->withoutExceptionHandling();
         $user = User::factory([])->create();
 
         $this->actingAs($user)->json('POST', route('workspace.store'), [

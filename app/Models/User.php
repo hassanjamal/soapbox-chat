@@ -45,4 +45,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Workspace::class);
     }
+    public function channels()
+    {
+        return $this->belongsToMany(Channel::class);
+    }
 }

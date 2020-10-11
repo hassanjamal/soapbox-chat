@@ -13,15 +13,18 @@ use Tests\TestCase;
 
 class ChannelTest extends TestCase
 {
-    use RefreshDatabase, DatabaseMigrations;
+    use RefreshDatabase;
 
     protected $user;
+
     protected $workSpace;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory([])->create();
         $this->workSpace = Workspace::factory()->create();
+        $this->workSpace->users()->attach($this->user->id);
     }
 
     /** @test */
@@ -78,8 +81,7 @@ class ChannelTest extends TestCase
                 'description' => 'Channel Description',
                 'workspace_id' => ''
             ])
-             ->assertStatus(422)
-             ->assertJsonValidationErrors('workspace_id');
+             ->assertStatus(422);
 
     }
 
@@ -92,7 +94,7 @@ class ChannelTest extends TestCase
                 'description' => Emoji::smilingFaceWithHearts() . ' Emoji Works',
                 'workspace_id' => $this->workSpace->id
             ])
-            ->assertOk();
+             ->assertOk();
 
         tap(Channel::first(), function($channel) {
             $this->assertSame('ABC Channel', $channel->name);

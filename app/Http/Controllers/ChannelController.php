@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
+use App\Models\Workspace;
 use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
+    /**
+     * @param Request $request
+     */
+    public function index (Request $request)
+    {
+        $workspace = Workspace::with('channels')->find(request('workspace_id'));
+        return response($workspace->channels, 200);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -30,15 +39,4 @@ class ChannelController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 }
